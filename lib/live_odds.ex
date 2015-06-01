@@ -1,0 +1,2 @@
+defmodule LiveOdds do
+end
