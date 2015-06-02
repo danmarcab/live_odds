@@ -1,7 +1,7 @@
 defmodule LiveOdds.Account do
 
-  def start do
-    Agent.start(fn() -> %{balance: 0} end, name: :account)
+  def start_link do
+    Agent.start_link(fn() -> %{balance: 0} end, name: :account)
   end
 
   def balance do

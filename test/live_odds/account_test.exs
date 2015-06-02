@@ -4,7 +4,7 @@ defmodule AccountTest do
   alias LiveOdds.Account
 
   test "server mantains the balance" do
-    Account.start
+    Account.start_link
 
     assert Account.balance == 0
     assert Account.credit(10) == :ok
