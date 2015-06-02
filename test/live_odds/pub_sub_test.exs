@@ -13,6 +13,8 @@ defmodule PubSubTest do
     assert PubSub.subscribers("topic") == []
 
     assert PubSub.topics == ["topic"]
+
+    PubSub.stop
   end
 
   test "can publish and receives messages" do
@@ -24,6 +26,8 @@ defmodule PubSubTest do
     PubSub.subscribe("topic")
     PubSub.publish("topic", :hello)
     assert_receive :hello
+
+    PubSub.stop
   end
 
   defmodule Subscriber do
@@ -57,6 +61,8 @@ defmodule PubSubTest do
     assert_receive {^pid1, :hello}
     assert_receive {^pid2, :hello}
     assert_receive {^pid3, :hello}
+
+    PubSub.stop
   end
 
   test "multiple processes can subscribe to multiple topics" do
@@ -65,12 +71,37 @@ defmodule PubSubTest do
     pid1 = Subscriber.init(self, ["topic", "cars"])
     pid2 = Subscriber.init(self, ["cars"])
     pid3 = Subscriber.init(self, ["topic"])
+
     :timer.sleep(100)
     PubSub.publish("topic", :hello)
     PubSub.publish("cars", :bmw)
+
     assert_receive {^pid1, :hello}
     assert_receive {^pid1, :bmw}
     assert_receive {^pid2, :bmw}
     assert_receive {^pid3, :hello}
+
+    PubSub.stop
   end
+
+  test "removes processes that died" do
+    PubSub.start_link
+
+    pid1 = Subscriber.init(self, ["topic", "cars"])
+    pid2 = Subscriber.init(self, ["cars"])
+    pid3 = Subscriber.init(self, ["topic"])
+
+    :timer.sleep(100)
+    assert PubSub.subscribers("topic") |> Enum.sort == [pid1, pid3] |> Enum.sort
+    assert PubSub.subscribers("cars") |> Enum.sort == [pid1, pid2] |> Enum.sort
+
+    Process.exit(pid1, "killed")
+    :timer.sleep(100)
+
+    assert PubSub.subscribers("topic") == [pid3]
+    assert PubSub.subscribers("cars") == [pid2]
+
+    PubSub.stop
+  end
+
 end
