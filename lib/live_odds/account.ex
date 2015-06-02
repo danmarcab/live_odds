@@ -20,10 +20,10 @@ defmodule LiveOdds.Account do
   end
   def debit(invalid_amount), do: :error
 
+  defp try_debit(%{balance: balance} = state, amount) when balance < amount do
+    {:error, state}
+  end
   defp try_debit(%{balance: balance} = state, amount) do
-    cond do
-      balance < amount -> {:error, state}
-      true -> {:ok, %{state| balance: balance - amount}}
-    end
+    {:ok, %{state| balance: balance - amount}}
   end
 end
