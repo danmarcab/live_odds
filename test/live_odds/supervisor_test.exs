@@ -6,11 +6,11 @@ defmodule SupervisorTest do
   test "server killing child ressurects child " do
      Supervisor.start_link
      pid = Process.whereis(LiveOdds.PubSub)
-     pid2 = Process.whereis(:account)
+     pid2 = :global.whereis_name(LiveOdds.Account.name(1))
      Process.exit(pid, 'Pubsub dead')
      Process.exit(pid2, 'Account Bankcrupt')
      :timer.sleep(500)
      assert is_pid(Process.whereis(LiveOdds.PubSub))
-     assert is_pid(Process.whereis(:account))
+     assert :global.whereis_name(LiveOdds.Account.name(1))
   end
 end
