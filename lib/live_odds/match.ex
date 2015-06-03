@@ -20,9 +20,9 @@ defmodule LiveOdds.Match do
   end
 
   def handle_info({{:fex_match_info, match_id}, match_info}, %__MODULE__{match_id: match_id} = match) do
-    IO.puts "Match #{match_id}: #{inspect match_info}"
+    # IO.puts "Match #{match_id}: #{inspect match_info}"
     match = update_match(match, match_info)
-    LiveOdds.PubSub.publish(name(match_id), match.odds)
+    LiveOdds.PubSub.publish(name(match_id), {match_id, match.odds})
     {:noreply, match}
   end
 
