@@ -8,7 +8,9 @@ defmodule LiveOdds.Supervisor do
 
   def init([]) do
     children = [
+      worker(LiveOdds.MatchObserver, []),
       worker(LiveOdds.Account.Supervisor, []),
+      worker(LiveOdds.Match.Supervisor, []),
       worker(LiveOdds.PubSub, [])
     ]
     supervise(children, [strategy: :one_for_one])
