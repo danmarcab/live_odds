@@ -1,0 +1,4 @@
+%{"conform": {:hex, :conform, "0.13.0"},
+  "exrm": {:hex, :exrm, "0.15.3"},
+  "fex": {:git, "https://github.com/lehoff/fex.git", "8bfd3d1dd10a8d973f33fdd09f1ac25d4d90bc95", []},
+  "ogma": {:git, "https://github.com/lehoff/ogma.git", "76c6d905ef50c8229b33714918765313cbd54bd7", []}}

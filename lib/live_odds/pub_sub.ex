@@ -39,10 +39,6 @@ defmodule LiveOdds.PubSub do
     {:reply, state |> Map.keys, state}
   end
 
-  def handle_call(:topics, _from, state) do
-    {:reply, state |> Map.keys, state}
-  end
-
   def handle_cast(:stop, state) do
     {:stop, :normal, state}
   end
@@ -54,7 +50,7 @@ defmodule LiveOdds.PubSub do
     {:noreply, state}
   end
 
-  def handle_info({:EXIT, pid, reason}, state) do
+  def handle_info({:EXIT, pid, _reason}, state) do
     state = for {topic, subscribers} <- state do
       new_subscribers = subscribers |> Set.delete(pid)
       {topic, new_subscribers}

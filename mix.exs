@@ -14,7 +14,8 @@ defmodule LiveOdds.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :fex],
+     mod: {LiveOdds.App, []}]
   end
 
   # Dependencies can be Hex packages:
@@ -27,6 +28,6 @@ defmodule LiveOdds.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [{:fex, git: "https://github.com/lehoff/fex.git"}]
   end
 end
