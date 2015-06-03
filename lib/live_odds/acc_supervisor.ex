@@ -18,7 +18,6 @@ defmodule LiveOdds.Account.Supervisor do
      children = [
        worker(LiveOdds.Account, [])
      ]
-
      supervise(children, strategy: :simple_one_for_one)
    end
 end
